@@ -4,9 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WSHogwartz.Domain.Models;
-using WSHogwartz.Models;
+using WSHogwartz.Dtos;
+using WSHogwartz.Repository.Models;
 
-namespace WSHogwartz.Dtos
+namespace WSHogwartz.Infrastructure
 {
     public class MappingProfile : Profile
     {

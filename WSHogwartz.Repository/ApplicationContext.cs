@@ -3,8 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WSHogwartz.Repository.Models;
 
-namespace WSHogwartz.Models
+namespace WSHogwartz.Repository
 {
     public class ApplicationContext : DbContext
     {

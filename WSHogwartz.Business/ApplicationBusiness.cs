@@ -6,8 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using WSHogwartz.Business.Interfaces;
 using WSHogwartz.Domain.Models;
-using WSHogwartz.Models;
 using WSHogwartz.Repository.Infrastructure.Interfaces;
+using WSHogwartz.Repository.Models;
 
 namespace WSHogwartz.Business
 {

@@ -15,8 +15,8 @@ using System.Threading.Tasks;
 using WSHogwartz.Business;
 using WSHogwartz.Business.Interfaces;
 using WSHogwartz.Dtos;
-using WSHogwartz.Models;
-using WSHogwartz.Repositories;
+using WSHogwartz.Infrastructure;
+using WSHogwartz.Repository;
 using WSHogwartz.Repository.Infrastructure;
 using WSHogwartz.Repository.Infrastructure.Interfaces;
 

@@ -8,8 +8,6 @@ using System.Threading.Tasks;
 using WSHogwartz.Business.Interfaces;
 using WSHogwartz.Domain.Models;
 using WSHogwartz.Dtos;
-using WSHogwartz.Models;
-using WSHogwartz.Repositories;
 
 namespace WSHogwartz.Controllers
 {
@@ -77,10 +75,11 @@ namespace WSHogwartz.Controllers
                 if (id != applicationDom.Id)
                     return BadRequest();
 
-                var applicationToUpdateDom = await _applicationBusiness.GetSingleApplicationAsync(applicationDom.Id);
+                /*var applicationToUpdateDom = await _applicationBusiness.GetSingleApplicationAsync(applicationDom.Id);
 
                 if (applicationToUpdateDom == null)
                     return NotFound();
+                */
 
                 await _applicationBusiness.UpdateApplicationAsync(applicationDom);
 

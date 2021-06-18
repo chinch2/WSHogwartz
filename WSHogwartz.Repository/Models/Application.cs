@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace WSHogwartz.Models
+namespace WSHogwartz.Repository.Models
 {
     public class Application
     {

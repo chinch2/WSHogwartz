@@ -3,10 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WSHogwartz.Models;
 using WSHogwartz.Repository.Infrastructure;
+using WSHogwartz.Repository.Models;
+using WSHogwartz.Repository.Repositories.Interfaces;
 
-namespace WSHogwartz.Repositories
+namespace WSHogwartz.Repository.Repositories
 {
     public class ApplicationRepository : Repository<Application>, IApplicationRepository
     {
