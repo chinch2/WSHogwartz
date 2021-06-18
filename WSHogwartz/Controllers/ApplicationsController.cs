@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WSHogwartz.Business.Interfaces;
+using WSHogwartz.Domain.Models;
 using WSHogwartz.Dtos;
 using WSHogwartz.Models;
 using WSHogwartz.Repositories;
@@ -15,20 +17,21 @@ namespace WSHogwartz.Controllers
     [ApiController]
     public class ApplicationsController : ControllerBase
     {
-        private readonly IApplicationRepository _applicationRepository;
+        private readonly IApplicationBusiness _applicationBusiness;
         private readonly IMapper _mapper;
 
-        public ApplicationsController(IApplicationRepository applicationRepository, IMapper mapper)
+        public ApplicationsController(IApplicationBusiness applicationBusiness, IMapper mapper)
         {
-            _applicationRepository = applicationRepository;
+            _applicationBusiness = applicationBusiness;
             _mapper = mapper;
         }
 
         [HttpGet]
         public async Task<IEnumerable<ApplicationDto>> GetApplications()
         {
-            var applications = await _applicationRepository.Get();
-            var applicationsDto = _mapper.Map<IEnumerable<ApplicationDto>>(applications);
+            var applicationsDom = await _applicationBusiness.GetAllApplicationsAsync();
+
+            var applicationsDto = _mapper.Map<IEnumerable<ApplicationDto>>(applicationsDom);
 
             return applicationsDto;
         }
@@ -36,12 +39,12 @@ namespace WSHogwartz.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ApplicationDto>> GetApplications(int id)
         {
-            var application = await _applicationRepository.Get(id);
+            var applicationDom = await _applicationBusiness.GetSingleApplicationAsync(id);
 
-            if (application == null)
+            if (applicationDom == null)
                 return NotFound();
 
-            var applicationDto = _mapper.Map<ApplicationDto>(application);
+            var applicationDto = _mapper.Map<ApplicationDto>(applicationDom);
 
             return applicationDto;
         }
@@ -49,37 +52,66 @@ namespace WSHogwartz.Controllers
         [HttpPost]
         public async Task<ActionResult<ApplicationDto>> PostApplications([FromBody] CreateApplicationDto createApplicationDto)
         {
-            var application = _mapper.Map<Application>(createApplicationDto);
-            var newApplication = await _applicationRepository.Create(application);
-            var newApplicationDto = _mapper.Map<ApplicationDto>(newApplication);
+            try
+            {
+                var applicationDom = _mapper.Map<ApplicationDomain>(createApplicationDto);
+                var newApplicationDom = await _applicationBusiness.CreateApplicationAsync(applicationDom);
+                var newApplicationDto = _mapper.Map<ApplicationDto>(newApplicationDom);
 
-            return CreatedAtAction(nameof(GetApplications), new { id = newApplicationDto.Id }, newApplicationDto);
+                return CreatedAtAction(nameof(GetApplications), new { id = newApplicationDto.Id }, newApplicationDto);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
         [HttpPut]
         public async Task<ActionResult> PutApplications(int id, [FromBody] UpdateApplicationDto updateApplicationDto)
         {
-            var application = _mapper.Map<Application>(updateApplicationDto);
-
-            if(id != application.Id)
+            try
             {
-                return BadRequest();
+                var applicationDom = _mapper.Map<ApplicationDomain>(updateApplicationDto);
+
+                if (id != applicationDom.Id)
+                    return BadRequest();
+
+                var applicationToUpdateDom = await _applicationBusiness.GetSingleApplicationAsync(applicationDom.Id);
+
+                if (applicationToUpdateDom == null)
+                    return NotFound();
+
+                await _applicationBusiness.UpdateApplicationAsync(applicationDom);
+
+                return NoContent();
             }
+            catch (Exception ex)
+            {
 
-            await _applicationRepository.Update(application);
-
-            return NoContent();
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteApplications(int id)
         {
-            var applicationToDelete = await _applicationRepository.Get(id);
-            if (applicationToDelete == null)
-                return NotFound();
+            try
+            {
+                var applicationToDeleteDom = await _applicationBusiness.GetSingleApplicationAsync(id);
 
-            await _applicationRepository.Delete(applicationToDelete.Id);
-            return NoContent();
+                if (applicationToDeleteDom == null)
+                    return NotFound();
+
+                await _applicationBusiness.DeleteApplicationAsync(id);
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
     }
 }

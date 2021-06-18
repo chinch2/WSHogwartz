@@ -12,9 +12,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WSHogwartz.Business;
+using WSHogwartz.Business.Interfaces;
 using WSHogwartz.Dtos;
 using WSHogwartz.Models;
 using WSHogwartz.Repositories;
+using WSHogwartz.Repository.Infrastructure;
+using WSHogwartz.Repository.Infrastructure.Interfaces;
 
 namespace WSHogwartz
 {
@@ -31,7 +35,8 @@ namespace WSHogwartz
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAutoMapper(typeof(MappingProfile));
-            services.AddScoped<IApplicationRepository, ApplicationRepository>();
+            services.AddScoped<IApplicationBusiness, ApplicationBusiness>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddDbContext<ApplicationContext>(o => o.UseSqlite("Data source=applications.db"));
             services.AddControllers();
             services.AddSwaggerGen(c =>
