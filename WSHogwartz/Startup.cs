@@ -37,7 +37,7 @@ namespace WSHogwartz
             services.AddAutoMapper(typeof(MappingProfile));
             services.AddScoped<IApplicationBusiness, ApplicationBusiness>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddDbContext<ApplicationContext>(o => o.UseSqlite("Data source=applications.db"));
+            services.AddDbContext<ApplicationContext>(o => o.UseSqlite("Data source=../WSHogwartz.Repository/applications.db"));
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
